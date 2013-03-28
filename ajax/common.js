@@ -73,6 +73,10 @@ $(document).ready(function() {
 	});
 
 	$('#letter-e a').click(function() {
-		var requestData = {};
+		var requestData = {term: $(this).text()};
+		$.get('e.php', requestData, function(data) {
+			$('#dictionary').html(data);
+		});
+		return false;
 	});
 });

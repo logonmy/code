@@ -96,7 +96,7 @@ $entries = array(
 );
 
 if(isset($entries[strtoupper($_REQUEST['term'])])) {
-	$term = strtoupper(['term']);
+	$term = strtoupper($_REQUEST['term']);
 	$entry = $entries[$term];
 	echo build_entry($term, $entry);
 }else{
