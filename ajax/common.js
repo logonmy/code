@@ -2,7 +2,9 @@
 
 $(document).ready(function() {
 	$('#letter-a a').click(function() {
-		$('#dictionary').load('a.html');
+		$('#dictionary').hide().load('a.html', function() {
+            $(this).fadeIn();     
+        });
 		return false;
 	});
 
@@ -79,9 +81,29 @@ $(document).ready(function() {
 		});
 		return false;
 	});
+/*
+	$('#letter-f form').submit(function(event) {
+		event.preventDefault;
+		$.get('f.php', {'term': $('input[name="term"]').val()},
+			function(data) {
+				$('#dictionary').html(data);
+			});
+	});
+*/   
+    
+    $('#letter-f form').submit(function(event) {
+        event.preventDefault();     
+        var formValues = $(this).serialize();
+        $.get('f.php', formValues, function(data) {
+            $('#dictionary').html(data);     
+        });
+    });
 
-	$().submit() {
-		event.preventDefault();
-		var
-	}
+    $('<div id="loading">Loading...</div>')
+    .insertBefore('#dictionary')
+    .ajaxStart(function() {
+        $(this).show();     
+    }).ajaxStop(function() {
+        $(this).hide(); 
+    });
 });
