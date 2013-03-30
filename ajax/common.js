@@ -78,7 +78,11 @@ $(document).ready(function() {
 		var requestData = {term: $(this).text()};
 		$.get('e.php', requestData, function(data) {
 			$('#dictionary').html(data);
-		});
+		}).error(function(jqXHR) {
+           $('#dictionary') 
+           .html('sorry, but an error occurred: ' + jqXHR.status)
+           .append(jqXHR.responseText);
+        });
 		return false;
 	});
 /*
@@ -99,11 +103,33 @@ $(document).ready(function() {
         });
     });
 
+    var url = 'http://examples.learningjquery.com/jsonp/g.php';
+    $('#letter-g a').click(function() {
+       $.getJSON(url + 'callback=?', function (data) {
+          var html = ''; 
+          $.each(data, function(entryIndex, entry) {
+            html += '<div class="entry">';     
+            html += '<h3 class="term">' + entry.term + '</h3>''
+            html += '<div class="part">' + entry.part + '</div>';
+            html += '<div clas="definition">';
+            html += entry.definition;
+            if(entry.quote) {
+                
+            }
+          });
+       }); 
+       return false;
+    });
+
     $('<div id="loading">Loading...</div>')
     .insertBefore('#dictionary')
     .ajaxStart(function() {
         $(this).show();     
     }).ajaxStop(function() {
         $(this).hide(); 
+    });
+
+    $('h3.term').live('click', function() {
+        $(this).siblings('.definition').slideToggle(); 
     });
 });
