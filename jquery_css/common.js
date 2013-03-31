@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    /*
    var $speech = $('div.speech'); 
    var defaultSize = $speech.css('fontSize');
    $('#switcher button').click(function() {
@@ -15,6 +16,7 @@ $(document).ready(function() {
       }
       $speech.css('fontSize', num + 'px');
     });
+   */
     
     /*
     //slideDown
@@ -57,4 +59,23 @@ $(document).ready(function() {
        return false;
     });
     */
+
+    /*
+    var $firstPara = $('p').eq(1);
+    $firstPara.hide();
+    $('a.more').click(function() {
+       $firstPara.animate({height: 'toggle',
+                           opacity: 'toggle',
+                          }, 'slow'); 
+       var $link = $(this);
+       if($link.text() == 'read more') {
+          $line.text('read less'); 
+       }else{
+        $line.text('read more'); 
+       }
+       return false;
+    });
+    */
+
+    
 });
