@@ -14,9 +14,35 @@ $(document).ready(function() {
   $('<a href="#top">back to top</a>').insertAfter('div.chapter p');
   $('<a id="top"></a>').prependTo('body');
 
+  /*
   //create footnotes.
   var $notes = $('<ol id="notes"></ol>').insertBefore('#footer');
-  $('span.footnote').each(function() {
+  $('span.footnote').each(function(index) {
+    $('<sup>' + (index + 1) + '</sup>').insertBefore(this);
     $(this).appendTo($notes).wrap('<li></li>');  
    });
+  */
+
+/*
+  var $notes = $('<ol id="notes"></ol>').insertBefore('#footer');
+  $('span.footnote').each(function(index) {
+    $(this)
+    .before('<sup>' + (index + 1) + '</sup>')
+    .appendTo($notes)
+    .wrap('<li></li>');     
+  })
+*/
+
+    var $notes = $('<ol id="notes"></ol>').insertBefore('#footer');
+    $('span.footnote').each(function(index) {
+       $(this) 
+        .before([
+            '<sup>', 
+            index + 1,
+            '</sup>'
+        ].join(''))
+        .appendTo($notes)
+        .wrap('<li></li>');
+    });
+  
 });
