@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>setTimeout</title>
+    </head>
+    <body>
+        <form id="form1" runat="server">
+                <div id='div1'>
+                        </div>
+                            </form>
+                            </body>
+                            </html>
+
+                            <script type="text/javascript">
+
+                            //設定倒數秒數
+                            var t = 10;
+
+                            //顯示倒數秒收
+                            function showTime()
+                            {
+                                    t -= 1;
+                                        document.getElementById('div1').innerHTML= t;
+                                            
+                                                if(t==0)
+                                                        {
+                                                                    location.href='http://www.baidu.com';
+                                                                        }
+                                                                            
+                                                                                //每秒執行一次,showTime()
+                                                                                    setTimeout("showTime()",1000);
+                            }
+
+                            //執行showTime()
+                            showTime();
+                            </script>
