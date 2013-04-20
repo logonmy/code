@@ -30,8 +30,8 @@
                 </div>
             </div>
         </div>
-        <a href="#myModal" role="button" class="btn" data-toggle="modal">查看演示案例</a>
 
+        <button type="botton" data-toggle="modal" data-target="#myModal">Launch modal</button>
         <!-- Modal -->
         <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
@@ -47,4 +47,8 @@
             </div>
         </div>
     </body>
+    <script type="text/javascript">
+        $('#myModal').modal('toggle'
+        );
+    </script>
 </html>
