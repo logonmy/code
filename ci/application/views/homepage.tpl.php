@@ -1,54 +1,37 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <title>bootstrap</title>
-        <script src="<?php echo $demo_config['site']['static_path']; ?>/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
-        <LINK href="<?php echo $demo_config['site']['static_path']; ?>/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+        <title>Bootstrap 101 Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="<?php echo $demo_config['site']['static_path'];?>/css/bootstrap.min.css" rel="stylesheet" media="screen">
     </head>
     <body>
-        <div class="btn-toolbar">
-            <div class="btn-group">
-                <button class="btn">Left</button>
-                <button class="btn">Middle</button>
-                <button class="btn">Right</button>
-            </div>
-            <div class="btn-group btn-group-vertical">
-                <button class="btn">1</button>
-                <button class="btn">2</button>
-                <button class="btn">3</button>
-            </div>
-        </div>
-        <div class="modal">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3>对话框标题</h3>
-                <div class="modal-body">
-                    <p>One fine body...</p>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn">关闭</a>
-                    <a href="#" class="btn btn-primary">Save changes</a>
-                </div>
-            </div>
-        </div>
+        <script src="<?php echo $demo_config['site']['static_path'];?>/js/jquery-1.9.1.min.js"></script>
+        <script src="<?php echo $demo_config['site']['static_path'];?>/js/bootstrap.js"></script>
 
-        <button type="botton" data-toggle="modal" data-target="#myModal">Launch modal</button>
-        <!-- Modal -->
-        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!-- Button to trigger model -->
+        <!--<a href="#myModal" role="button" class="btn" data-toggle="modal">查看演示实例</a>-->
+        <button type="button" data-toggle="modal" data-toggle="modal" data-target="#myModal">Launch modal</button>
+
+        <!-- Model-->
+        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledy="myModalLabel" aria-hidden="true">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                 <h3 id="myModalLabel">Modal header</h3>
             </div>
             <div class="modal-body">
-                <p>One fine body…</p>
+                <p>One fine body...</p>
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
                 <button class="btn btn-primary">Save changes</button>
             </div>
         </div>
+
+        <div class="dropdown">
+        </div>
     </body>
-    <script type="text/javascript">
-        $('#myModal').modal('toggle'
-        );
-    </script>
 </html>
+<script>
+</script>
