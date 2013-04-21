@@ -38,8 +38,25 @@
                 <li><a href="#">action</a></li>
            </ul>
         </div>
+ <br/><br/><br/><br/>       <br/>
+
+
+        <a id="example" class="btn" title="" data-content="Viviamam" data-title="Popover on the top" data-toggle="popover" href="#" data-original-title="Popover on top" data-placement="top">Popover on the top</a>
+<br/><br/><br/><br/>       <br/>
+
+        <div class="alert alert-bolck alert-error fade in">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h4 class="alert-heading">Oh snap! You got an error!</h4>
+            <p>Change this and that and try again. Duis mollis, est non commodo</p>
+        </div>
+ <br/><br/><br/><br/>       <br/>
+
+        <div>
+        </div>
     </body>
 </html>
 <script>
     $('.dropdown-toggle').dropdown();
+    $('#example').popover('show');
+    $(".alert").alert('closed');
 </script>
