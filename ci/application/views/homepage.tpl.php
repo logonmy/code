@@ -30,8 +30,16 @@
         </div>
 
         <div class="dropdown">
+           <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="/page.html">
+            Dropdown
+            <b class="caret"></b> 
+           </a>
+           <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li><a href="#">action</a></li>
+           </ul>
         </div>
     </body>
 </html>
 <script>
+    $('.dropdown-toggle').dropdown();
 </script>
