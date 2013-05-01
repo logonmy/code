@@ -13,14 +13,14 @@
                 }
             }
 
-            function checkall(obj,Name) {
+            function checkall(Name) {
                var checkboxs = document.getElementsByName(Name); 
                for(var i=0;i<checkboxs.length;i++) {
                   checkboxs[i].checked = true; 
                }
             }
 
-            function check_none(obj,Name) {
+            function check_none(Name) {
                var checkboxs = document.getElementsByName(Name); 
                for(var i=0;i<checkboxs.length;i++) {
                   checkboxs[i].checked = false; 
@@ -30,8 +30,8 @@
     </head>
     <body>
     <p><input type="checkbox" name="all" onclick="check_all(this,'c')"/>全选/全不选</p>
-    <p><button onclick="checkall(this, 'c')">全选</button></p>
-    <p><button onclick="check_none(this, 'c')">取消</button></p>
+    <p><button onclick="checkall('c')">全选</button></p>
+    <p><button onclick="check_none('c')">取消</button></p>
     <p><input type="checkbox" name="c" value=""/></p>
     <p><input type="checkbox" name="c" value=""/></p>
     <p><input type="checkbox" name="c" value=""/></p>
