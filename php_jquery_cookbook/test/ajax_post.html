@@ -1,0 +1,70 @@
+<html> 
+	<head> 
+		<meta charset="utf-8"> 
+		<title>ajax_post</title> 
+	</head> 
+	 
+	<body> 
+		<input type="text" id="t1" name="keyword" /><span id="tip"></span><br/> 
+		<input type="button" id="btn" value="click search" /> 
+
+
+		<script type="text/javascript">
+			function ajax(url, fnTip, fnSucc, FnFaild) {
+				var oAjax = null;
+				if(window.XMLHttpRequest) {
+					oAjax = new XMLHttpRequest();
+				}else{
+					oAjax = new ActiveXObject('Microsoft.XMLHTTP');
+				}
+				oAjax.open('POST', url, true);
+				oAjax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"
+					);
+				oAjax.send('keyword=' + document.getElementById('t1').value);
+
+				if(fnTip) fnTip();
+				oAjax.onreadystatechange = function() {
+					if(oAjax.readyState == 4) {
+						if(oAjax.status == 200) {
+							if(fnSucc) fnSucc(oAjax.responseText);
+						}else{
+							if(FnFaild) FnFaild();
+						}
+					}
+				}
+			}
+
+			function insertAfter(newElement, targetElement) {
+				var parent = targetElement.parentNode;
+				if(parent.lastChild == targetElement) {
+					parent.appencChild(newElement);
+				}else{
+					parent.insertBefore(newElement, targetElement.nextSibling)
+				}
+			}
+
+			window.onload = function() {
+				var oT = document.getElementById('t1');
+				var oBtn = document.getElementById('btn');
+				var oTip = document.getElementById('tip');
+				 oBtn.onclick = function() {
+				 	oTip.innerHTML= '';
+				 	ajax('getdata.php', function() {
+				 		oBtn.setAttribute('disabled', 'true');
+				 		var oImg = document.createElement('img');
+				 		oImg.src = 'loading.gif';
+				 		oImg.id = 'loading';
+				 		insertAfter(oImg, oT);
+				 		oT.value = '';
+				 	},function(str) {
+				 		oBtn.removeAttribute('disabled');
+				 		document.body.removeChild(document.getElementById('loading'));
+				 		oTip.innerHTML = 'your search record is :<br>' + str + '</b>';
+				 	},function() {
+				 		alert('error');
+				 	});
+				 }
+			}
+		</script>
+	</body> 
+</html> 
