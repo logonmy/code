@@ -7,9 +7,10 @@ while (true){
     //sleep(1);    
     usleep(500000);//0.5秒    
     $i++;    
-    $data = $redis->get('data');
-    if(!empty($data)){    
-        $arr=array('success'=>"1",'name'=>'xiaocai','text'=>$data);    
+   // $data = $redis->get('data');
+    $msg = $redis->rpop('msg');
+    if(!empty($msg)){    
+        $arr=array('success'=>"1",'name'=>'xiaocai','text'=>$msg);    
         $redis->delete('data');
         echo json_encode($arr);    
         exit();    
