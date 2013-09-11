@@ -1,7 +1,6 @@
 <?php
-	$redis = new Redis();
-	$redis->connect('127.0.0.1', 6379);
-	$data = $_POST['data'];
+    require('./connect.php');
+	$data = !empty($_POST['data']) ? $_POST['data'] : '';
 	$redis->set('data', $data);
 ?>
 <html>

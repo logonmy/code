@@ -1,4 +1,5 @@
 <?php
+    require('./connect.php');
    if(empty($_POST['time']))exit();    
 set_time_limit(0);//无限请求超时时间    
 $i=0;    
@@ -6,11 +7,10 @@ while (true){
     //sleep(1);    
     usleep(500000);//0.5秒    
     $i++;    
-        
-    //若得到数据则马上返回数据给客服端，并结束本次请求    
-    $rand=rand(1,999);    
-    if($rand<=15){    
-        $arr=array('success'=>"1",'name'=>'xiaocai','text'=>$rand);    
+    $data = $redis->get('data');
+    if(!empty($data)){    
+        $arr=array('success'=>"1",'name'=>'xiaocai','text'=>$data);    
+        $redis->delete('data');
         echo json_encode($arr);    
         exit();    
     }    
