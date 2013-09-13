@@ -202,5 +202,17 @@ class memcacheQueue{
         $KeyArray   = $this->getkeyArray($length);
         $lastkey    = $keyArray['lastKey'];
         $currentKey = $keyArray['currentKey'];
+        $keys       = $keyArray['keys'];
+        $this->changeHead($this->lastSide, $lastKey);
+        $this->changeHead($this->currentSide, $currentKey);
+
+        $data = @memcache_get(self::$client, $keys);
+        if(empty($data)) $data = array();
+        foreach($keys as $v) { //取出后删除
+            @memcache_delte(self::$client, $v, 0); 
+        }
+        $this->unLock();
+
+        return $data;
     }
 }
