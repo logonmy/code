@@ -215,4 +215,183 @@ class memcacheQueue{
 
         return $data;
     }
+
+    /**
+    * 读取数据
+    * @param [length] int 数据的长度
+    * @return array
+    *
+    */
+    public function read($lenght=0) {
+       if(!is_numeric($length)) return false; 
+       if(empty($length)) $length = self::MAXNUM *2; //默认读取所有
+           $keyArray = $this->getKeyArray($length);
+           $data = @memcache_get(self::$client, $keyArray['keys']);
+           if(empty($data)) $data = array();
+           return $data;
+    }
+
+    /**
+    * 获取队列某段长度的key数组
+    * @param [length] int 队列长度
+    * @preturn array
+    *
+    */
+    public function getKeyArray($length) {
+       $result = array('keys' => array(), 'lastKey' => null, 'currentKey' => null); 
+       $this->getHeadNTail($this->queueName);
+       $this->getCurrentSide();
+       if(empty($length)) return $result;
+
+
+       //先取上面的key
+       $i = $result['lastKey'] = 0;
+       for($i = 0; $i<$length;$i++) {
+          $result['lastKey'] = $this->lastHead + $i;
+          if($result['lastKey'] >= $this->lastTail) break;
+          $result['keys'][] = $this->queueName.$this->lastSide.self::VALU_KEY.$result['lastKey'];
+       }
+
+      //再取当前面的key
+      $j = $length - $i;
+      $k = $result['currentKey'] = 0;
+      for($k=0;$k<$j;$k++) {
+         $result['currentKey'] = $this->currentHead + $k; 
+         if($result['currentKey'] >= $this->currentTail) break;
+         $result['keys'][] = $this->queueName. $this->currentSide.self::VALU_KEY.$result['currentKey'];
+      }
+      return $result;
+    }
+
+    /**
+    * 更新当前轮值面队列尾的值
+    * @return NULL
+    *
+    */
+    private function changeTail() {
+        $tail_eky = $this->queueName . $this->currentSide.self::TAIL_KEY;
+        memcache_add(self::$client, $tail_key, 0, false, $this->expire); //如果没有，则插入;有则false
+        $v = memcache_get(self::$client, $tail_key) + 1;
+        memcache_set(self::$client, $tail_key, $v, false, $this->expire);
+    }
+    
+    /*
+     * 更新队列首的值
+     * @param [side]    string 要更新的面
+     * @param [headValue] int  队列首的值
+     * @return  NULL
+     */
+    private function changeHead($side, $headValue) {
+        $head_key = $this->queueName .$side .self::HEAD_KEY;
+        $tail_key = $this->queueName .$side .self::TAIL_KEY;
+        $sideTail = memcache_get(self::$client, $tail_key);
+        if($headValue < $sideTail) {
+            memcache_set(self::$client, $head_key, $headValue+1, false, $this->expire);
+        }elseif($headValue >= $sideTail) {
+            $this->resetSide($side);
+        }
+    }
+    
+    /*
+     * 重置队列面，即将该队列面的队首，队尾值置为0
+     * @param [side] string 要重置的面
+     * @return NULL
+     */
+    private function resetSide($side) {
+        $head_key = $this->queueName .$side . self::HEAD_KEY;
+        $tail_key = $this->queueName .$side . self::TAIL_KEY;
+        memcache_set(self::$client, $head_key, 0, false, $this->expire);
+        memcache_set(self::$client, $tail_key, 0, false, $this->expire);
+    }
+    
+    /**
+     * 改变当前轮值队列面
+     * @return string
+     */
+    private function changeCurrentSide() {
+        $currentSide = memcache_get(self::$client, $this->queueName.self::SIDE_KEY);
+        if($currentSide == 'A') {
+            memcache_set(self::$client, $this->queueName .self::SIDE_KEY, 'B', false, $this->expire);
+            $this->currentSide = 'B';
+        }else{
+            memcache_set(self::$client, $this->queueName .self::SIDE_KEY, 'A', false, $this->expire);
+            $this->currentSide = 'A';
+        }
+        return $this->currentSide;
+    }
+    
+    /**
+     * 检查当前队列是否已满
+     * @return boolean
+     */
+    public function isFull() {
+        $result = false;
+        if($this->sideATail == self::MAXNUM && $this->sideBTail == self::MAXNUM) {
+            $result = true;
+        }
+        return $result;
+    }
+    
+    /**
+     * 检查当前队列是否为空
+     * @return boolean
+     */
+    public function isEmpty() {
+        $result = true;
+        if($this->sideATail > 0 || $this->sideBTail > 0) {
+            $result = false;
+        }
+        return $result;
+    }
+    
+    /**
+     * 获取当前队列的长度
+     * 该长度为理论长度,某些元素由于过期失效而丢失,真是长度小于或等于该长度
+     * @return int
+     */
+    public function getQueueLength() {
+        $this->getHeadNTail($this->queueName);
+        
+        $sideALength = $this->sideATail - $this->sideAHead;
+        $sideBLength = $this->sideBTail - $this->sideBHead;
+        $result = $sideALength + $sideBLength;
+        
+        return $result;
+    }
+    
+    /**
+     * 清空当前队列数据,仅保留HEAD_KEY,TAIL_KEY,SIDE_KEY 三个KEY
+     * @return boolean
+     */
+    public function clear() {
+        if(!$this->getLock()) return false;
+        $this->getHeadNTail($this->queueName);
+        $AHead = $this->sideAHead;$AHead--;
+        $ATail = $this->sideATail;$ATail++;
+        $BHead = $this->sideBHead;$BHead--;
+        $BTail = $this->sideBTail;$BTail++;
+        
+        //删除A面
+        for($j=$AHead;$j<$ATail;$j++) {
+            @memcache_delete(self::$client, $this->queueName.'A'.self::VALUE_KEY .$i, 0);
+        }
+        
+        //删除B面
+        for($j=$BHead;$j<$BTail;$j++) {
+            @memcache_delete(self::$client, $this->queueName.'A'.self::VALUE_KEY.$j, 0);
+        }
+        
+        $this->unLock();
+        $this->resetSide('A');
+        $this->resetSide('B');
+        return true;
+    }
+    
+    /**
+     * 清除所有memcache缓存数据 
+     * @return NULL
+     */
+    public function memFlush() {
+        memcache_flush(sele::$client);
+    }
 }
