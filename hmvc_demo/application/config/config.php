@@ -363,7 +363,7 @@ $config['proxy_ips'] = '';
 |-------------------------------------------------------------------------
 |
 */
-$config['modules_locations'] = array(APPPATH.'modules_core' => '../modules_core/',);
+$config['modules_locations'] = array(APPPATH.'modules_core/' => '../modules_core/',);
 
 
 /* End of file config.php */
